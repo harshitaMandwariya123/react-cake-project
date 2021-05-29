@@ -1,12 +1,20 @@
 import './App.css';
-import Navbar from "./Navbar";
-import Slider from "./Slider";
+import Navbar from "./components/Navbar";
+import Signup from './components/Signup';
+import Slider from "./components/Slider";
+
+
+var data = {
+  shopName : "Cake N Bake"
+}
 
 function App() {
+
   return (
     <div className="App">
-      <Navbar/>
+      <Navbar  details={data}>HM</Navbar>
       <Slider/>
+      <Signup/>
     </div>
   );
 }
