@@ -51,10 +51,11 @@ class Signup extends Component {
 		return(
             <form className="container mt-3" onSubmit={this.onSubmitHandler}>
                 <div className="form-group">
-                    <label htmlFor="name">Enter Name</label>
+                    <label htmlFor="name">Full Name</label>
                     <input type="name"
                         className="form-control" 
-                        id="name" placeholder="name"  
+                        id="name"
+                        placeholder="Enter Full Name"  
                         value={this.state.name} 
                         onChange={this.changeNameHandler}
                     />
@@ -64,7 +65,7 @@ class Signup extends Component {
                     <input type="text" 
                         className="form-control" 
                         id="email" aria-describedby="emailHelp" 
-                        placeholder="Enter email" 
+                        placeholder="Enter Email" 
                         value={this.state.email} 
                         onChange={this.changeEmailHandler}
                     />
@@ -76,7 +77,7 @@ class Signup extends Component {
                         type="password" 
                         className="form-control" 
                         id="password" 
-                        placeholder="Password"  
+                        placeholder="Enter Password"  
                         value={this.state.password} 
                         onChange={this.changePasswordHandler}
                     />
