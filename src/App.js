@@ -1,4 +1,6 @@
 import './App.css';
+import CakeList from './components/CakeList';
+import Cake from './components/Cake';
 import Navbar from "./components/Navbar";
 import Signup from './components/Signup';
 import Slider from "./components/Slider";
@@ -14,7 +16,7 @@ function App() {
     <div className="App">
       <Navbar  details={data}>HM</Navbar>
       <Slider/>
-      <Signup/>
+      <CakeList/>
     </div>
   );
 }
