@@ -3,7 +3,6 @@ import {Component} from "react"
 class Signup extends Component {
 	constructor(props) {
 		super(props)
-		this.emailError="";
 		this.state={
             name:"",
 			email:"",
@@ -18,7 +17,6 @@ class Signup extends Component {
 	}
 
 	changeEmailHandler = (event)=> { 
-		this.emailError=""
 		this.setState({
 			email:event.target.value
 		})
@@ -32,24 +30,13 @@ class Signup extends Component {
 	
 	onSubmitHandler = (event) => {
 		event.preventDefault();
-        this.emailError="";
-		var inputEmail=this.state.email
-		var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
-		
-		if(!inputEmail){
-			this.emailError="Email is required Field"
-		}else if(!pattern.test(inputEmail)){
-			this.emailError="Invalid Email Format"
-		}
-
-		this.setState({
-			emailError:this.emailError
-		})
+		this.props.callme();
 	}
 	
 	render(){
 		return(
-            <form className="container mt-3" onSubmit={this.onSubmitHandler}>
+            <form className="container mt-3" onSubmit={this.onSubmitHandler} data-parsley-validate="">
+				<h3>Sign Up</h3>
                 <div className="form-group">
                     <label htmlFor="name">Full Name</label>
                     <input type="name"
@@ -58,18 +45,19 @@ class Signup extends Component {
                         placeholder="Enter Full Name"  
                         value={this.state.name} 
                         onChange={this.changeNameHandler}
+						required
                     />
                 </div>
                 <div className="form-group">
                     <label htmlFor="email">Email address</label>
-                    <input type="text" 
+                    <input type="email" 
                         className="form-control" 
                         id="email" aria-describedby="emailHelp" 
                         placeholder="Enter Email" 
                         value={this.state.email} 
                         onChange={this.changeEmailHandler}
+						required
                     />
-                    {this.emailError && <small id="emailError" className="form-text form-error">{this.emailError}</small>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
@@ -80,6 +68,7 @@ class Signup extends Component {
                         placeholder="Enter Password"  
                         value={this.state.password} 
                         onChange={this.changePasswordHandler}
+						required
                     />
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>

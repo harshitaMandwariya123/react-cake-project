@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 let Navbar = (props) => {
+ 
     let name = "Harshita Mandwariya";
     let getTargetValue;
 
@@ -45,6 +48,8 @@ let Navbar = (props) => {
           <form className="form-inline my-2 my-lg-0">
             <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={getSearchText}/>
             <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={onClickEvent}>Search</button>
+           {!props.isLoggedIn && <a href="/signin" className="btn btn-primary">Login</a>}
+           {props.isLoggedIn && <button className="btn btn-primary">Logout</button>}
           </form>
         </div>
       </nav>
