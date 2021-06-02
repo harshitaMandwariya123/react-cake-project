@@ -12,7 +12,7 @@ function CakeList(){
 
     useEffect (() => {
         setLoading(true);
-        axios({method:"GET", url:"http://apibyashu.herokuapp.com/api/allcakes", data:JSON})
+        axios({method:"GET", url:"https://apibyashu.herokuapp.com/api/allcakes", data:JSON})
         .then((response) => {
             setLoading(false);
             setCakes(response.data.data);

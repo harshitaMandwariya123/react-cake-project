@@ -17,7 +17,7 @@ let Login = (props) => {
 
     let onSubmitHandler = (event) => {
 		event.preventDefault();
-        axios({method:"POST", url:"http://apibyashu.herokuapp.com/api/login", data:{email:inputs.email, password:inputs.password}})
+        axios({method:"POST", url:"https://apibyashu.herokuapp.com/api/login", data:{email:inputs.email, password:inputs.password}})
         .then((response) => {
             console.log(response);
             if(response.data.token) {

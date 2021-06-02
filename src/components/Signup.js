@@ -22,7 +22,7 @@ let Signup = (props) =>  {
 	let onSubmitHandler = (event) => {
 		event.preventDefault();
 		// props.callme();
-        axios({method:"POST", url:"http://apibyashu.herokuapp.com/api/register", data:{name:name, email:email, password:password}})
+        axios({method:"POST", url:"https://apibyashu.herokuapp.com/api/register", data:{name:name, email:email, password:password}})
         .then((response) => {
             console.log(response);
             if(response.data.message == "User Registered") {
