@@ -31,7 +31,7 @@ function App() {
               </div>
             </div>)}/>
             <Route path="/signin" component={Login} />
-            <Route path="/signup" component={() => (<Signup callme={myPhone} email={"hm@gmail.com"}/>)} />
+            <Route path="/signup" component={Signup} />
         </Switch>
       </div>
     </Router>

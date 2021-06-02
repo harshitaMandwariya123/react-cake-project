@@ -1,50 +1,51 @@
-import {Component} from "react"
+import {useState} from "react"
+import axios from "axios";
 
-class Signup extends Component {
-	constructor(props) {
-		super(props)
-		this.state={
-            name:"",
-			email:"",
-			password:"",
-		}
+let Signup = (props) =>  {
+
+    const[name,setName] = useState();
+    const[email,setEmail] = useState();
+    const[password,setPassword] = useState();
+
+    let changeNameHandler = (event) => {
+		setName(event.target.value)
 	}
 
-    changeNameHandler = (event) => {
-		this.setState({
-			name:event.target.value
-		})
-	}
-
-	changeEmailHandler = (event)=> { 
-		this.setState({
-			email:event.target.value
-		})
+	let changeEmailHandler = (event)=> { 
+        setEmail(event.target.value)
 	}
 	
-	changePasswordHandler = (event) => {
-		this.setState({
-			password:event.target.value
-		})
+	let changePasswordHandler = (event) => {
+        setPassword(event.target.value)
 	}
 	
-	onSubmitHandler = (event) => {
+	let onSubmitHandler = (event) => {
 		event.preventDefault();
-		this.props.callme();
+		// props.callme();
+        axios({method:"POST", url:"http://apibyashu.herokuapp.com/api/register", data:{name:name, email:email, password:password}})
+        .then((response) => {
+            console.log(response);
+            if(response.data.message == "User Registered") {
+                props.history.push("/signin");
+            } else {
+                alert(response.data.message)
+            }
+        },(error) => {
+            console.log(error);
+        })
 	}
 	
-	render(){
 		return(
-            <form className="container mt-3" onSubmit={this.onSubmitHandler} data-parsley-validate="">
-				<h3>Sign Up</h3>
+            <form className="container mt-3" onSubmit={onSubmitHandler} data-parsley-validate="">
+				<h3>Register</h3>
                 <div className="form-group">
                     <label htmlFor="name">Full Name</label>
                     <input type="name"
                         className="form-control" 
                         id="name"
                         placeholder="Enter Full Name"  
-                        value={this.state.name} 
-                        onChange={this.changeNameHandler}
+                        value={name} 
+                        onChange={changeNameHandler}
 						required
                     />
                 </div>
@@ -54,8 +55,8 @@ class Signup extends Component {
                         className="form-control" 
                         id="email" aria-describedby="emailHelp" 
                         placeholder="Enter Email" 
-                        value={this.state.email} 
-                        onChange={this.changeEmailHandler}
+                        value={email} 
+                        onChange={changeEmailHandler}
 						required
                     />
                 </div>
@@ -66,8 +67,8 @@ class Signup extends Component {
                         className="form-control" 
                         id="password" 
                         placeholder="Enter Password"  
-                        value={this.state.password} 
-                        onChange={this.changePasswordHandler}
+                        value={password} 
+                        onChange={changePasswordHandler}
 						required
                     />
                 </div>
@@ -76,6 +77,4 @@ class Signup extends Component {
 		)
 	}
 	
-}
-
 export default Signup;
