@@ -6,32 +6,18 @@ import Navbar from "./components/Navbar";
 import Signup from './components/Signup';
 import Slider from "./components/Slider";
 import Login from "./components/Login";
+import PageNotFound from "./components/PageNotFound"
+import Home from "./components/Home"
 
 function App() {
-
-  const[login, setLogin] = useState(false);
-
-  var data = {
-    shopName : "Cake N Bake"
-  }
-
-  let myPhone = () => {
-    setLogin(true);
-  }
-
   return (
     <Router>
       <div className="App">
-         <Navbar isLoggedIn={login} details={data}>HM</Navbar>
-         <Slider/>
         <Switch>
-            <Route exact path='/' component={() => (<div className="container mt-4">
-              <div className="row">
-                <CakeList/>
-              </div>
-            </div>)}/>
-            <Route path="/signin" component={Login} />
-            <Route path="/signup" component={Signup} />
+            <Route exact path="/" component={Home}/>
+            <Route exact path="/signin" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/*" component={PageNotFound} />
         </Switch>
       </div>
     </Router>

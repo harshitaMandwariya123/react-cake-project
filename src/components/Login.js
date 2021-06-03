@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 let Login = (props) => {
 
@@ -56,7 +57,7 @@ let Login = (props) => {
                 <a href="#">Forget password?</a>
             </p>
             <p className="text-left">
-                <a href="/signup">Don't have account? Signup</a>
+                <Link to="/signup">Don't have account? Signup</Link>
             </p>
         </form>
     );

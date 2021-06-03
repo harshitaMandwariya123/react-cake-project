@@ -1,5 +1,6 @@
 import {useState} from "react"
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 let Signup = (props) =>  {
 
@@ -21,7 +22,6 @@ let Signup = (props) =>  {
 	
 	let onSubmitHandler = (event) => {
 		event.preventDefault();
-		// props.callme();
         axios({method:"POST", url:"https://apibyashu.herokuapp.com/api/register", data:{name:name, email:email, password:password}})
         .then((response) => {
             console.log(response);
@@ -73,6 +73,9 @@ let Signup = (props) =>  {
                     />
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
+                <p className="text-left">
+                    <Link to="/signin">Already have account? Login</Link>
+                </p>
             </form>
 		)
 	}

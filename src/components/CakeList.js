@@ -7,7 +7,7 @@ import Loader from "react-loader-spinner";
 function CakeList(){
 
     const[cakes, setCakes] = useState([])
-    const[loading, setLoading] = useState(false)
+    const[isLoading, setLoading] = useState(false)
     const style = {marginLeft:"450px"};
 
     useEffect (() => {
@@ -21,7 +21,7 @@ function CakeList(){
         })
     },[])
 
-    if (loading) return ( <div style={style}><Loader type="TailSpin" height={200} width={200} /></div>); 
+    if (isLoading) return ( <div style={style}><Loader type="TailSpin" height={200} width={200} /></div>); 
 
     var cakeList = cakes.map((value,index) => {
 		var cakeobj={name:value.name, image:value.image, price:value.price}
