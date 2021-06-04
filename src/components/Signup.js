@@ -1,6 +1,8 @@
 import {useState} from "react"
 import axios from "axios";
 import { Link } from "react-router-dom";
+import {toast} from 'react-toastify'
+toast.configure()
 
 let Signup = (props) =>  {
 
@@ -24,14 +26,14 @@ let Signup = (props) =>  {
 		event.preventDefault();
         axios({method:"POST", url:"https://apibyashu.herokuapp.com/api/register", data:{name:name, email:email, password:password}})
         .then((response) => {
-            console.log(response);
             if(response.data.message == "User Registered") {
+                toast.success("Registered Successfully");
                 props.history.push("/signin");
             } else {
-                alert(response.data.message)
+                toast.error("User Already Exists");
             }
         },(error) => {
-            console.log(error);
+            toast.error("Some Error Occured");
         })
 	}
 	

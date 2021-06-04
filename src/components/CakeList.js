@@ -24,7 +24,7 @@ function CakeList(){
     if (isLoading) return ( <div style={style}><Loader type="TailSpin" height={200} width={200} /></div>); 
 
     var cakeList = cakes.map((value,index) => {
-		var cakeobj={name:value.name, image:value.image, price:value.price}
+		var cakeobj={cakeid:value.cakeid, name:value.name, image:value.image, price:value.price}
 		return(
            
             <div key={index} className="col-3">

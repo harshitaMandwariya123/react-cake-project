@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import {toast} from 'react-toastify'
+toast.configure()
 
 let Login = (props) => {
 
@@ -22,12 +24,15 @@ let Login = (props) => {
         .then((response) => {
             console.log(response);
             if(response.data.token) {
+                toast.success("Logged in Successfully");
+                localStorage.setItem('name',response.data.name);
+                localStorage.setItem('loggedin',true);
                 props.history.push("/");
             } else {
-                alert(response.data.message)
+                toast.error("Invalid Credentials");
             }
         },(error) => {
-            console.log(error);
+            toast.error("Some Error Occured");
         })
 	}
 
@@ -63,4 +68,5 @@ let Login = (props) => {
     );
 }
 
+Login = withRouter(Login)
 export default Login;
