@@ -5,19 +5,12 @@
 .navbar{
   height: 70px;
 }
- .Coursel-img
+.Coursel-img
  {
-    height: 500px !important ;
+    height: 300px !important ;
     width: 100% !important;
 }
 
-  p.loader-text{
-    margin-top: 0;
-    font-size: 26px;
-    margin-bottom: 1rem;
-    position: absolute;
-    padding: 134px 590px;
-}
 .carddetails{
   height:435px;
   width:498px;
@@ -56,7 +49,6 @@ a:hover{
 .card.signup{
   background-color: #1b1a1a;
   width:1200px;
-  /* padding: auto; */
 }
 .signup.form-control{
   background-color: #f8f9fa;
@@ -123,9 +115,9 @@ a:hover{
 .zoom {
   padding: 50px;
   background-color:#f8f9fa;
-  transition: transform .2s; /* Animation */
-  width: 200px;
-  height: 100px;
+  transition: transform .1s; /* Animation */
+  width: 100px;
+  height: 50px;
   margin: 0 auto;
 }
 

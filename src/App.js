@@ -1,23 +1,55 @@
 import './App.css';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import React, {Suspense, Redirect} from 'react';
 import Signup from './components/Signup';
 import Login from "./components/Login";
 import PageNotFound from "./components/PageNotFound"
 import Home from "./components/Home"
 import Search from "./components/Search"
 import CakeDetail from "./components/CakeDetail";
+import Navbar from "./components/Navbar";
+import Checkout from "./components/Checkout";
+import {toast} from 'react-toastify'
+import axios from "axios";
+
+var Cart = React.lazy(() => import('./components/Cart'))
+
+Cart = <Suspense fallback={<div>Loading...</div>}><Cart/></Suspense>
+
 
 function App() {
+
+  if(localStorage.token) {
+    
+      var userToken = localStorage.token
+      var getUserUrl  = process.env.REACT_APP_BASE_URL+"/getuserdetails"
+      axios({
+        method:"get",
+        url:getUserUrl,
+        headers:{
+          authtoken:userToken
+        }
+      }).then((response) => {
+          console.log(response,"response");
+      },(error) =>{
+           toast.error(error);
+         })
+    }
+
   return (
     <Router>
       <div className="App">
+      <Navbar/>
         <Switch>
             <Route exact path="/" component={Home}/>
             <Route exact path="/signin" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/cake/:cakeid" component={CakeDetail} />
+            <Route exact path="/cart">{Cart}</Route>
+            <Route path="/checkout" component={Checkout} />
             <Route exact path="/search" component={Search} />
             <Route exact path="/*" component={PageNotFound} />
+            <Redirect to="/"></Redirect>
         </Switch>
       </div>
     </Router>

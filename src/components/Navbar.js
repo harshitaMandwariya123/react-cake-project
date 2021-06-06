@@ -5,14 +5,12 @@ toast.configure()
 
 let Navbar = (props) => {
     let searchString;
-    let name = "Harshita Mandwariya";
-
     const[searchresult, setSearchResult] = useState([]);
 
     let onClickSearchEvent = (event) => {
       event.preventDefault();
 
-      if(searchresult != "") {
+      if(searchresult !== "") {
         props.history.push("/search/?q=" +searchresult)
       } else {
         toast.warning("Please Enter Any Query String.");
@@ -23,7 +21,7 @@ let Navbar = (props) => {
     let getSearchText = (event) => {
       searchString = event.target.value;   
       setSearchResult(searchString);  
-      if(event.target.value == "") {
+      if(event.target.value === "") {
         props.history.push("/")
       } 
     }
@@ -46,12 +44,15 @@ let Navbar = (props) => {
               <Link className="nav-link" to="/"><b>Cake N Back</b><span className="sr-only">(current)</span></Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link">Welcome  {localStorage.name && localStorage.name}</Link>
+              <Link to="/" className="nav-link">Welcome  {localStorage.name && localStorage.name}</Link>
             </li>
           </ul>
+          <Link to ="/cart"><button class="btn btn-warning">
+              <i style={{width:"25px"}} class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+          </Link>&nbsp;&nbsp;
           <form className="form-inline my-2 my-lg-0">
             <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={getSearchText}/>
-            <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={onClickSearchEvent}>Search</button>
+            <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={onClickSearchEvent}>Search</button>&nbsp;&nbsp;
            {!localStorage.loggedin && <Link to="/signin" className="btn btn-primary">Login</Link>}
            {localStorage.loggedin && <button className="btn btn-primary" onClick={logout} type="button">Logout</button>}
           </form>

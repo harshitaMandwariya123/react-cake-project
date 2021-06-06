@@ -22,11 +22,13 @@ let Signup = (props) =>  {
         setPassword(event.target.value)
 	}
 	
+    var apiurl = process.env.REACT_APP_BASE_URL+"/register";
+    
 	let onSubmitHandler = (event) => {
 		event.preventDefault();
-        axios({method:"POST", url:"https://apibyashu.herokuapp.com/api/register", data:{name:name, email:email, password:password}})
+        axios({method:"POST", url:apiurl, data:{name:name, email:email, password:password}})
         .then((response) => {
-            if(response.data.message == "User Registered") {
+            if(response.data.message === "User Registered") {
                 toast.success("Registered Successfully");
                 props.history.push("/signin");
             } else {

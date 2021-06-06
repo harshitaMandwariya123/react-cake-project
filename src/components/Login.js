@@ -18,14 +18,17 @@ let Login = (props) => {
         setInputs({ ...inputs, [name]: value });
     };
 
+    var apiurl = process.env.REACT_APP_BASE_URL+"/login";
+
     let onSubmitHandler = (event) => {
 		event.preventDefault();
-        axios({method:"POST", url:"https://apibyashu.herokuapp.com/api/login", data:{email:inputs.email, password:inputs.password}})
+        axios({method:"POST", url:apiurl, data:{email:inputs.email, password:inputs.password}})
         .then((response) => {
-            console.log(response);
             if(response.data.token) {
                 toast.success("Logged in Successfully");
                 localStorage.setItem('name',response.data.name);
+                localStorage.setItem('token',response.data.token);
+                localStorage.setItem('email',response.data.email);
                 localStorage.setItem('loggedin',true);
                 props.history.push("/");
             } else {
@@ -59,7 +62,7 @@ let Login = (props) => {
 
             <button type="submit" className="btn btn-primary btn-block">Submit</button>
             <p className="text-right">
-                <a href="#">Forget password?</a>
+                <a href="/forget-password">Forget password?</a>
             </p>
             <p className="text-left">
                 <Link to="/signup">Don't have account? Signup</Link>

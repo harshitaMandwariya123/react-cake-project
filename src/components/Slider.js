@@ -1,5 +1,3 @@
-import "../assests/slider.css";
-
 let Slider = () => {
     return (
         <div id="carouselExampleControls" className="carousel slide" data-ride="carousel">

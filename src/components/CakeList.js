@@ -3,37 +3,42 @@ import Cake from "./Cake";
 import axios from "axios";
 import { useEffect } from "react";
 import Loader from "react-loader-spinner";
+import {toast} from 'react-toastify'
 
 function CakeList(){
 
     const[cakes, setCakes] = useState([])
     const[isLoading, setLoading] = useState(false)
-    const style = {marginLeft:"450px"};
+
+    var apiurl = process.env.REACT_APP_BASE_URL+"/allcakes";
 
     useEffect (() => {
         setLoading(true);
-        axios({method:"GET", url:"https://apibyashu.herokuapp.com/api/allcakes", data:JSON})
+        axios({method:"GET", url:apiurl, data:JSON})
         .then((response) => {
             setLoading(false);
             setCakes(response.data.data);
         },(error) => {
-            console.log(error);
+            toast.error(error);
         })
     },[])
 
-    if (isLoading) return ( <div style={style}><Loader type="TailSpin" height={200} width={200} /></div>); 
-
-    var cakeList = cakes.map((value,index) => {
-		var cakeobj={cakeid:value.cakeid, name:value.name, image:value.image, price:value.price}
-		return(
-           
-            <div key={index} className="col-3">
-                 <Cake cake={cakeobj} index={index}/>
+    
+    return(
+        <div className="container">
+            <div className="card-groups">
+            {isLoading && ( <div style={{marginLeft:"450px"}}><Loader type="TailSpin" height={200} width={200} /></div>) }
+                {cakes.map((value,index) => {
+                    return(
+                        <div key={index} className="col-4">
+                            <Cake cake={value} key={index}/>
+                        </div>
+                    )
+                })}
             </div>
-           
-	    )
-    })
-	return cakeList
+        </div>
+    )
+  
 }
 
 export default CakeList
