@@ -5,6 +5,7 @@ import axios from "axios";
 import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
+import {connect} from "react-redux"
 
 function CardDetails(props) {
     var [data,setData] = useState([]);
@@ -22,7 +23,7 @@ function CardDetails(props) {
         });
     },[params.cakeid])
 
-    var addToCart = (cakeid,name,price,image) => {
+    var addToCart = (cakeid,name,price,image,weight) => {
         if(localStorage.token) {
             var userToken = localStorage.token
             let addToCartUrl = process.env.REACT_APP_BASE_URL+"/addcaketocart"
@@ -31,12 +32,16 @@ function CardDetails(props) {
                 name,
                 image,
                 price,
-                weight:"500"
+                weight
             }
         axios({method:"post", url:addToCartUrl, headers:{authtoken:userToken},data:data})
         .then((response) => {
                 if(response.status = '200') {
                     toast.success("Added to cart..");
+                    props.dispatch({
+                        type:"ADDTOCART",
+                        payload:response
+                    })
                 } else {
                     toast.error("Not added to cart...")
                 }
@@ -58,7 +63,7 @@ function CardDetails(props) {
                                 <div className="col">
                                     <img className="img-fluid carddetails mb-3"  src={data.image}  alt=""/>
                                     <p className="card-text"><b>{data.name}</b></p>
-                                    <button onClick={() => addToCart(data.cakeid,data.name,data.price,data.image)} class="btn btn-success" type="button">
+                                    <button onClick={() => addToCart(data.cakeid,data.name,data.price,data.image,data.weight)} class="btn btn-success" type="button">
                                     <i className="fa fa-cart-plus" aria-hidden="true">Add to Cart</i></button>
                                     <Link className="nav-link" to="/">Go to Home</Link>
                                     <div class="card-footer text-muted"></div>
@@ -109,4 +114,4 @@ function CardDetails(props) {
 
     )
 }
-export default CardDetails
+export default connect()(CardDetails);

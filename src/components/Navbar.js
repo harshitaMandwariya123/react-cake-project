@@ -1,6 +1,9 @@
 import { Link, withRouter } from "react-router-dom";
-import { useState } from "react";
 import {toast} from 'react-toastify'
+import {connect} from "react-redux"
+import axios from "axios";
+import { useEffect, useState } from 'react';
+
 toast.configure()
 
 let Navbar = (props) => {
@@ -27,9 +30,32 @@ let Navbar = (props) => {
     }
 
     let logout = ()=>{
-      localStorage.clear();
-      props.history.push("/signin")
+      props.dispatch({
+        type:"LOGOUT"
+      })
+      props.history.push('/')
     }    
+
+    useEffect(() => {
+      if (localStorage.token) {
+          axios({
+              url: process.env.REACT_APP_BASE_URL + '/cakecart',
+              method: 'post',
+              headers: {
+                  authtoken: localStorage.getItem('token')
+              }
+          }).then(res => {
+              const cakeList = res.data.data
+              props.dispatch({
+                  type: "SHOW_CART",
+                  payload: {
+                      data: cakeList.length
+                  }
+              })
+          }, err => {
+          })
+      }
+    }, [])
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -47,14 +73,15 @@ let Navbar = (props) => {
               <Link to="/" className="nav-link">Welcome  {localStorage.name && localStorage.name}</Link>
             </li>
           </ul>
-          <Link to ="/cart"><button class="btn btn-warning">
-              <i style={{width:"25px"}} class="fa fa-shopping-cart" aria-hidden="true"></i></button>
-          </Link>&nbsp;&nbsp;
+          {props.loginstatus && <Link to ="/cart"><button class="btn btn-warning">
+              <i style={{width:"25px"}} class="fa fa-shopping-cart" aria-hidden="true"></i></button>{props.totalItems}
+          </Link>}&nbsp;&nbsp;
           <form className="form-inline my-2 my-lg-0">
             <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={getSearchText}/>
             <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={onClickSearchEvent}>Search</button>&nbsp;&nbsp;
-           {!localStorage.loggedin && <Link to="/signin" className="btn btn-primary">Login</Link>}
-           {localStorage.loggedin && <button className="btn btn-primary" onClick={logout} type="button">Logout</button>}
+           {!props.loginstatus && <Link to="/signin" className="btn btn-primary">Login</Link>}
+           {props.loginstatus && <button className="btn btn-primary" onClick={logout} type="button">Logout</button>}
+           
           </form>
         </div>
       </nav>
@@ -62,4 +89,13 @@ let Navbar = (props) => {
 }
 
 Navbar = withRouter(Navbar);
-export default Navbar;
+export default connect((state) => {
+  console.log(state,"state");
+  return {
+    // username: state.AuthReducer.username,
+    // loginstatus: state.AuthReducer.isloggedin,
+    totalItems: state?.CartReducer.totalItems,
+    username:state?.AuthReducer.username,
+    loginstatus:state?.AuthReducer.isloggedin
+  }
+})(Navbar);

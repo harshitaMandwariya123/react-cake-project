@@ -1,7 +1,9 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 import {toast} from 'react-toastify'
+import {connect} from "react-redux";
+import {loginmiddleware} from "../reduxstore/middlewares";
+
 toast.configure()
 
 let Login = (props) => {
@@ -18,25 +20,10 @@ let Login = (props) => {
         setInputs({ ...inputs, [name]: value });
     };
 
-    var apiurl = process.env.REACT_APP_BASE_URL+"/login";
-
     let onSubmitHandler = (event) => {
 		event.preventDefault();
-        axios({method:"POST", url:apiurl, data:{email:inputs.email, password:inputs.password}})
-        .then((response) => {
-            if(response.data.token) {
-                toast.success("Logged in Successfully");
-                localStorage.setItem('name',response.data.name);
-                localStorage.setItem('token',response.data.token);
-                localStorage.setItem('email',response.data.email);
-                localStorage.setItem('loggedin',true);
-                props.history.push("/");
-            } else {
-                toast.error("Invalid Credentials");
-            }
-        },(error) => {
-            toast.error("Some Error Occured");
-        })
+        var middlefunction = loginmiddleware(inputs)
+			props.dispatch(middlefunction)
 	}
 
     return (
@@ -71,5 +58,16 @@ let Login = (props) => {
     );
 }
 
-Login = withRouter(Login)
-export default Login;
+Login =connect(function(state,props){
+	alert("props" + JSON.stringify(props))
+  if(state.AuthReducer?.isloggedin==true){
+      props.history.push("/")
+  }else{
+	  return {
+		  isloading:state.AuthReducer?.isloading
+	  }
+  }
+})(Login) 
+// i passed login to withRouter it return me Login with some addional things
+// then i exported modified Login
+export default withRouter(Login)
