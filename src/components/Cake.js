@@ -10,6 +10,7 @@ function Cake(props) {
                 <div className="card-body">
                     <h5 className="card-title">Name : {props.cake.name}</h5>
                     <p className="card-text">Price : {props.cake.price}</p>
+                    { props.page === 'cart_summary' && <p className="card-text">Quantity {props.cake.quantity} </p> }
                 </div>
             </div>
         </>

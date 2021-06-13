@@ -59,8 +59,7 @@ let Login = (props) => {
 }
 
 Login =connect(function(state,props){
-	alert("props" + JSON.stringify(props))
-  if(state.AuthReducer?.isloggedin==true){
+  if(state.AuthReducer?.isloggedin === true){
       props.history.push("/")
   }else{
 	  return {

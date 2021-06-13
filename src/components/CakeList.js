@@ -4,6 +4,8 @@ import axios from "axios";
 import { useEffect } from "react";
 import Loader from "react-loader-spinner";
 import {toast} from 'react-toastify'
+import {withRouter} from "react-router-dom";
+import {connect} from "react-redux";
 
 function CakeList(){
 
@@ -41,4 +43,4 @@ function CakeList(){
   
 }
 
-export default CakeList
+export default connect() (withRouter(CakeList))

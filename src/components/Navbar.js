@@ -49,7 +49,7 @@ let Navbar = (props) => {
               props.dispatch({
                   type: "SHOW_CART",
                   payload: {
-                      data: cakeList.length
+                      data: cakeList
                   }
               })
           }, err => {
@@ -73,8 +73,8 @@ let Navbar = (props) => {
               <Link to="/" className="nav-link">Welcome  {localStorage.name && localStorage.name}</Link>
             </li>
           </ul>
-          {props.loginstatus && <Link to ="/cart"><button class="btn btn-warning">
-              <i style={{width:"25px"}} class="fa fa-shopping-cart" aria-hidden="true"></i></button>{props.totalItems}
+          {props.loginstatus && <Link to ="/cart"><button className="btn btn-warning">
+              <i style={{width:"25px"}} className="fa fa-shopping-cart" aria-hidden="true">{props.totalItems}</i></button>
           </Link>}&nbsp;&nbsp;
           <form className="form-inline my-2 my-lg-0">
             <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={getSearchText}/>
@@ -90,10 +90,7 @@ let Navbar = (props) => {
 
 Navbar = withRouter(Navbar);
 export default connect((state) => {
-  console.log(state,"state");
   return {
-    // username: state.AuthReducer.username,
-    // loginstatus: state.AuthReducer.isloggedin,
     totalItems: state?.CartReducer.totalItems,
     username:state?.AuthReducer.username,
     loginstatus:state?.AuthReducer.isloggedin

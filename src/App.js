@@ -1,6 +1,6 @@
 import './App.css';
-import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import React, {Suspense, Redirect} from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
+import React, {Suspense} from 'react';
 import Signup from './components/Signup';
 import Login from "./components/Login";
 import PageNotFound from "./components/PageNotFound"
@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar";
 import Checkout from "./components/Checkout";
 import {toast} from 'react-toastify'
 import axios from "axios";
+import Orders from './components/Orders';
 
 var Cart = React.lazy(() => import('./components/Cart'))
 
@@ -30,7 +31,7 @@ function App() {
           authtoken:userToken
         }
       }).then((response) => {
-          console.log(response,"response");
+        toast.success(response);
       },(error) =>{
            toast.error(error);
          })
@@ -48,6 +49,7 @@ function App() {
             <Route exact path="/cart">{Cart}</Route>
             <Route path="/checkout" component={Checkout} />
             <Route exact path="/search" component={Search} />
+            <Route exact path="/orders" component={Orders} />
             <Route exact path="/*" component={PageNotFound} />
             <Redirect to="/"></Redirect>
         </Switch>

@@ -1,13 +1,14 @@
 import StarRatings from 'react-star-ratings';
-import { useParams } from "react-router"
+import { useParams, withRouter } from "react-router"
 import Loader from "react-loader-spinner";
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import {connect} from "react-redux"
+import {addCartMiddleware} from "../reduxstore/middlewares";
 
-function CardDetails(props) {
+var CakeDetail = (props) => {
     var [data,setData] = useState([]);
     var [islodding,setLodding] = useState(true)
     var params = useParams(props)
@@ -23,32 +24,40 @@ function CardDetails(props) {
         });
     },[params.cakeid])
 
-    var addToCart = (cakeid,name,price,image,weight) => {
-        if(localStorage.token) {
-            var userToken = localStorage.token
-            let addToCartUrl = process.env.REACT_APP_BASE_URL+"/addcaketocart"
-            const data = {
-                cakeid,
-                name,
-                image,
-                price,
-                weight
-            }
-        axios({method:"post", url:addToCartUrl, headers:{authtoken:userToken},data:data})
-        .then((response) => {
-                if(response.status = '200') {
-                    toast.success("Added to cart..");
-                    props.dispatch({
-                        type:"ADDTOCART",
-                        payload:response
-                    })
-                } else {
-                    toast.error("Not added to cart...")
-                }
-        },(error) => { 
-                toast.error("Error from addtocart api" , error)
-            })
-        } else {
+    // var addToCart = (cakeid,name,price,image,weight) => {
+    //     if(localStorage.token) {
+    //         var userToken = localStorage.token
+    //         let addToCartUrl = process.env.REACT_APP_BASE_URL+"/addcaketocart"
+    //         const data = {
+    //             cakeid,
+    //             name,
+    //             image,
+    //             price,
+    //             weight
+    //         }
+    //     axios({method:"post", url:addToCartUrl, headers:{authtoken:userToken},data:data})
+    //     .then((response) => {
+    //             if(response.status = '200') {
+    //                 toast.success("Added to cart..");
+    //                 props.dispatch({
+    //                     type:"ADDTOCART",
+    //                     payload:response
+    //                 })
+    //             } else {
+    //                 toast.error("Not added to cart...")
+    //             }
+    //     },(error) => { 
+    //             toast.error("Error from addtocart api" , error)
+    //         })
+    //     } else {
+    //         toast.warning("Please login first")
+    //     }
+    // }
+
+    let addToCart = (data) => {
+        if(localStorage.token) { 
+            props.dispatch(addCartMiddleware(data))
+        }else {
             toast.warning("Please login first")
         }
     }
@@ -63,10 +72,10 @@ function CardDetails(props) {
                                 <div className="col">
                                     <img className="img-fluid carddetails mb-3"  src={data.image}  alt=""/>
                                     <p className="card-text"><b>{data.name}</b></p>
-                                    <button onClick={() => addToCart(data.cakeid,data.name,data.price,data.image,data.weight)} class="btn btn-success" type="button">
+                                    <button onClick={() => addToCart(data)} className="btn btn-success" type="button">
                                     <i className="fa fa-cart-plus" aria-hidden="true">Add to Cart</i></button>
                                     <Link className="nav-link" to="/">Go to Home</Link>
-                                    <div class="card-footer text-muted"></div>
+                                    <div className="card-footer text-muted"></div>
                                 </div>
                                 <div className="col">
                                     <p className="card-text"><b>{data.name}</b></p>
@@ -114,4 +123,11 @@ function CardDetails(props) {
 
     )
 }
-export default connect()(CardDetails);
+CakeDetail = connect(function (state, props){
+    if (state.CartReducer.success) {
+        props.history.push('/cart')
+        state.CartReducer.success = false
+    }
+})(CakeDetail);
+
+export default withRouter(CakeDetail)
