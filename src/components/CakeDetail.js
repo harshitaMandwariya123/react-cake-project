@@ -24,36 +24,6 @@ var CakeDetail = (props) => {
         });
     },[params.cakeid])
 
-    // var addToCart = (cakeid,name,price,image,weight) => {
-    //     if(localStorage.token) {
-    //         var userToken = localStorage.token
-    //         let addToCartUrl = process.env.REACT_APP_BASE_URL+"/addcaketocart"
-    //         const data = {
-    //             cakeid,
-    //             name,
-    //             image,
-    //             price,
-    //             weight
-    //         }
-    //     axios({method:"post", url:addToCartUrl, headers:{authtoken:userToken},data:data})
-    //     .then((response) => {
-    //             if(response.status = '200') {
-    //                 toast.success("Added to cart..");
-    //                 props.dispatch({
-    //                     type:"ADDTOCART",
-    //                     payload:response
-    //                 })
-    //             } else {
-    //                 toast.error("Not added to cart...")
-    //             }
-    //     },(error) => { 
-    //             toast.error("Error from addtocart api" , error)
-    //         })
-    //     } else {
-    //         toast.warning("Please login first")
-    //     }
-    // }
-
     let addToCart = (data) => {
         if(localStorage.token) { 
             props.dispatch(addCartMiddleware(data))

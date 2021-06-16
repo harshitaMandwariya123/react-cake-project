@@ -18,9 +18,7 @@ const Summary = (props) => {
 
     useEffect(() => {
         axios({
-            url: process.env.REACT_APP_BASE_URL +'/cakecart', headers: {
-                authtoken: localStorage.getItem('token')
-            },
+            url: process.env.REACT_APP_BASE_URL +'/cakecart',
             method: 'post'
         }).then(res => {
             if (res.data !== 'Session Expired') {

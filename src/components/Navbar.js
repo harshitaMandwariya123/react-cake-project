@@ -41,9 +41,6 @@ let Navbar = (props) => {
           axios({
               url: process.env.REACT_APP_BASE_URL + '/cakecart',
               method: 'post',
-              headers: {
-                  authtoken: localStorage.getItem('token')
-              }
           }).then(res => {
               const cakeList = res.data.data
               props.dispatch({
@@ -67,7 +64,7 @@ let Navbar = (props) => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <Link className="nav-link" to="/"><b>Cake N Back</b><span className="sr-only">(current)</span></Link>
+              <Link className="nav-link" to="/"><b>Cake N Bake</b><span className="sr-only">(current)</span></Link>
             </li>
             <li className="nav-item">
               <Link to="/" className="nav-link">Welcome  {localStorage.name && localStorage.name}</Link>

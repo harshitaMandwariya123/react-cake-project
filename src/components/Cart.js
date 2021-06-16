@@ -5,7 +5,7 @@ import Cake from "./Cake";
 import {connect} from "react-redux";
 import {toast} from 'react-toastify'
 import {
-    addCartMiddleware,
+    addOneCartMiddleware,
     removeCakeFromCartMiddleware,
     removeOneCakeFromCartMiddleware,
     emptyCartMiddleware
@@ -17,15 +17,15 @@ const Cart = (props) => {
     let totalPrice = 0
 
     var addOneCakeToCart = (cakeId) => {
-        props.dispatch(addCartMiddleware(cakeId))
+        props.dispatch(addOneCartMiddleware(cakeId,cakes))
     }
 
     var removeOneCakeFromCart = (cakeId) => {
-        props.dispatch(removeOneCakeFromCartMiddleware(cakeId))
+        props.dispatch(removeOneCakeFromCartMiddleware(cakeId, cakes))
     }
 
     var removeCakeFromCart = (cakeId) => {
-        props.dispatch(removeCakeFromCartMiddleware(cakeId))
+        props.dispatch(removeCakeFromCartMiddleware(cakeId, cakes))
     }
 
     var emptyCart = () => {
@@ -36,9 +36,6 @@ const Cart = (props) => {
         axios({
             url: process.env.REACT_APP_BASE_URL +'/cakecart',
             method: 'post',
-            headers: {
-                authtoken: localStorage.getItem('token')
-            }
         }).then(res => {
             if (res.data !== 'Session Expired') {
                 const cakeList = res.data.data
@@ -55,7 +52,7 @@ const Cart = (props) => {
         }, (err) => {
           toast.error(err);
         })
-    }, [])
+    }, [props.cart_update])
 
     return (
 
@@ -138,8 +135,10 @@ const Cart = (props) => {
 var cart = connect(function (state,props) {
     if (state.CartReducer.removed) {
         state.CartReducer.removed = false
-        window.location.reload()
     }
+   return {
+        cart_update:state.CartReducer?.updatecart
+   }
 }) (Cart)
 
 export default (withRouter(cart))

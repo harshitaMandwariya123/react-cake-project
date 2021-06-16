@@ -43,13 +43,13 @@ let Checkout = (props) => {
             <div className="row">
                 <ul className="nav nav-tabs" style={{width: '100%'}}>
                     <li className="nav-item" style={{width: '50%'}}>
-                        <Link className={"nav-link " + (disableAddressLink ? "active" : "")} aria-current="page" to={'/checkout'}>Order Summary</Link>
+                        <Link className={"nav-link " + (disableAddressLink ? "active" : "")} aria-current="page" to={'/checkout'}>Cart Summary</Link>
                     </li>
                     <li className="nav-item" style={{width: '50%'}}>
                         {
                             !disableAddressLink
                             ? <Link className={"nav-link " + (disablePaymentLink ? "active" : "")} to={'/checkout/address'}>Address Details</Link>
-                                : <Link className="nav-link disabled" to={'/checkout/address'} tabIndex="-1" aria-disabled="true">Address Details</Link>
+                                : <Link className="nav-link disabled" to={'/checkout/address'} tabIndex="-1" aria-disabled="true">Shipping Address</Link>
                         }
                     </li>
                 </ul>

@@ -36,9 +36,34 @@ export function loginmiddleware(inputs){
     }
 }
 
-export const addCartMiddleware = (data) => {
+export const addOneCartMiddleware = (data,cakes) => {
     return function (dispatch) {
 
+        axios({
+            url: process.env.REACT_APP_BASE_URL +'/addcaketocart', headers:{authtoken:localStorage.token},
+            method: 'post',
+            data: {cakeid: data.cakeid, image: data.image, name: data.name, price: data.price, weight: data.weight}
+        }).then(res => {
+            console.log(cakes);
+            var cart = cakes
+              const check_index = cart.findIndex(e => e.cakeid === data.cakeid)
+                if (check_index !== -1) {
+                cart[check_index].quantity++
+              } 
+              dispatch({
+                type:"UPDATE_CART_ITEM",
+                payload:cart,
+                updatecart:true
+             })
+            toast.success("Added to Cart")
+        }, err => {
+            toast.error(err);
+        })
+    }
+}
+
+export const addCartMiddleware = (data) => {
+    return function (dispatch) {
         axios({
             url: process.env.REACT_APP_BASE_URL +'/addcaketocart', headers:{authtoken:localStorage.token},
             method: 'post',
@@ -49,6 +74,9 @@ export const addCartMiddleware = (data) => {
                 payload: {
                     data: res.data.data
                 }
+            })
+            dispatch({
+                type: "UPDATE_CART",
             })
             toast.success("Added to Cart")
         }, err => {
@@ -76,19 +104,23 @@ export const emptyCartMiddleware = () => {
     }
 }
 
-export const removeOneCakeFromCartMiddleware = (cakeId) => {
+export const removeOneCakeFromCartMiddleware = (cakeId, cakes) => {
     return function (dispatch) {
         axios({
             url: process.env.REACT_APP_BASE_URL + '/removeonecakefromcart',headers:{authtoken:localStorage.token},
             method: 'post',
             data: {cakeid: cakeId}
         }).then(res => {
+            var cart = cakes
+            const check_index = cart.findIndex(e => e.cakeid === cakeId)
+              if (check_index !== -1) {
+              cart[check_index].quantity--
+            } 
             dispatch({
-                type: 'REMOVE_ONE_FROM_CART',
-                payload: {
-                    data: res.data
-                }
-            })
+              type:"UPDATE_CART_ITEM",
+              payload:cart,
+              updatecart:true
+           })
             toast.success("One quantity has been removed")
         }, err => {
             toast.error(err);
@@ -96,20 +128,21 @@ export const removeOneCakeFromCartMiddleware = (cakeId) => {
     }
 }
 
-export const removeCakeFromCartMiddleware = (cakeId) => {
+export const removeCakeFromCartMiddleware = (cakeId, cakes) => {
     return function (dispatch) {
         axios({
             url: process.env.REACT_APP_BASE_URL + '/removecakefromcart',headers:{authtoken:localStorage.token},
             method: 'post',
             data: {cakeid: cakeId}
         }).then(res => {
-            dispatch({
-                type: 'REMOVE_ITEM_FROM_CART',
-                payload: {
-                    data: res.data
-                }
-            })
-            toast.success("Cake removed from cart")
+            var cart = cakes
+                cart.splice(cart.findIndex(e => e.cakeid === cakeId),1);
+                dispatch({
+                type:"UPDATE_CART_ITEM",
+                payload:cart,
+                updatecart:true
+             })
+             toast.success("Cake removed from cart")
         }, err => {
             toast.error(err);
         })

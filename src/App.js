@@ -12,6 +12,7 @@ import Checkout from "./components/Checkout";
 import {toast} from 'react-toastify'
 import axios from "axios";
 import Orders from './components/Orders';
+import admin from './components/admin';
 
 var Cart = React.lazy(() => import('./components/Cart'))
 
@@ -21,21 +22,25 @@ Cart = <Suspense fallback={<div>Loading...</div>}><Cart/></Suspense>
 function App() {
 
   if(localStorage.token) {
-    
-      var userToken = localStorage.token
-      var getUserUrl  = process.env.REACT_APP_BASE_URL+"/getuserdetails"
-      axios({
-        method:"get",
-        url:getUserUrl,
-        headers:{
-          authtoken:userToken
-        }
-      }).then((response) => {
-        toast.success(response);
-      },(error) =>{
-           toast.error(error);
-         })
+    var userToken = localStorage.token
+    var getUserUrl  = process.env.REACT_APP_BASE_URL+"/getuserdetails"
+    axios({
+      method:"get",
+      url:getUserUrl,
+      headers:{
+        authtoken:userToken
+      }
+    }).then((response) => {
+      toast.success(response);
+    },(error) =>{
+        toast.error(error);
+      })
     }
+
+  axios.interceptors.request.use((request) => {
+      request.headers["authtoken"] = localStorage.getItem('token')
+      return request
+  })
 
   return (
     <Router>
@@ -50,6 +55,7 @@ function App() {
             <Route path="/checkout" component={Checkout} />
             <Route exact path="/search" component={Search} />
             <Route exact path="/orders" component={Orders} />
+            <Route exact path="/admin" component={admin} />
             <Route exact path="/*" component={PageNotFound} />
             <Redirect to="/"></Redirect>
         </Switch>
