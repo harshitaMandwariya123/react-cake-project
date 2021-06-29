@@ -2,7 +2,6 @@ import {useState} from "react"
 import axios from "axios";
 import { Link } from "react-router-dom";
 import {toast} from 'react-toastify'
-toast.configure()
 
 let Signup = (props) =>  {
 
@@ -43,7 +42,7 @@ let Signup = (props) =>  {
             <form className="container mt-3" onSubmit={onSubmitHandler} data-parsley-validate="">
 				<h3>Register</h3>
                 <div className="form-group">
-                    <label htmlFor="name">Full Name</label>
+                    <label htmlhtmlFor="name">Full Name</label>
                     <input type="name"
                         className="form-control" 
                         id="name"
@@ -54,7 +53,7 @@ let Signup = (props) =>  {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="email">Email address</label>
+                    <label htmlhtmlFor="email">Email address</label>
                     <input type="email" 
                         className="form-control" 
                         id="email" aria-describedby="emailHelp" 
@@ -65,7 +64,7 @@ let Signup = (props) =>  {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="password">Password</label>
+                    <label htmlhtmlFor="password">Password</label>
                     <input 
                         type="password" 
                         className="form-control" 

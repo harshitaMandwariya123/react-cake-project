@@ -1,26 +1,24 @@
-import {useState} from "react";
-import {withRouter} from "react-router-dom";
-
-const Confirm = (props) => {
-    const [payment, setPayment] = useState(0)
-
-    const activeNextUrl = () => {
-        props.onSubmit(props.data)
-        props.history.push('/checkout/confirm')
-    }
-
-    return (
-        <div className="container">
-            <div>
-                <input type="radio" value={payment} name='payment' onChange={e => setPayment(1)} className="form-control"/>
-                <button className="btn btn-primary" style={{float: "right"}} onClick={activeNextUrl}>
-                <span>
-                    Proceed
-                </span>
-                </button>
+function Confirm(props){
+    return(
+        <div>
+        <center><h3>Confirm Details</h3></center>
+        <div className="container ">
+            <div className="card mb-3 cakeDetails" style={{minWidth: '700px'}}>
+                <div className="row g-0">
+                    <div className="col-md-12">
+                        <div className="card-body">
+                            <p className="card-text myClass2 head"> Name : <small className="text-muted">{props.data?.name}</small> </p>
+                            <p className="card-text myClass2 head"> Phone Number: <small className="text-muted"> {props.data?.phone}</small> </p>
+                            <p className="card-text myClass2 head"> Delivery Area:  <small className="text-muted"> {props.data?.address}</small> </p>
+                            <p className="card-text myClass2 head"> Payment Mode : <small className="text-muted"> Cash on Delivery</small> </p>
+                            <button className="button" style={{borderRadius:'0px'}} onClick={(e)=>props.click()}> Place order </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
     )
 }
 
-export default withRouter(Confirm)
+export default Confirm

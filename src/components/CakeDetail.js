@@ -21,6 +21,7 @@ var CakeDetail = (props) => {
             setLodding(false)
         },(error)=>{
             setLodding(false)
+            toast.error(error);
         });
     },[params.cakeid])
 

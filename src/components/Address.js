@@ -1,48 +1,71 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useState} from "react";
-import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
+import {Component} from "react";
+import { withRouter } from "react-router-dom";
 
-const Address = (props) => {
-    const [disablePaymentLink, setDisablePaymentLink] = useState(true)
-    const [fullname, setFullName] = useState('')
-    const [address, setAddress] = useState('')
-    const [city, setCity] = useState('')
-    const [pincode, setPincode] = useState('')
-    const [phone, setPhone] = useState('')
+class Address extends Component {
 
-    const submitAddress = (event) => {
-        event.preventDefault()
-        const finalValue = fullname + '_' + address + '_' + city + '_' + pincode + '_' + phone
-        props.onSubmit(finalValue)
-        setDisablePaymentLink(false)
-        props.onChange(disablePaymentLink)
+    constructor(props){
+        super(props)
+        this.state = {
+            name:'',
+            phone:'',
+            address:'',
+            city:'',
+            pincode:'',
+            FormError:'',
+            };
+        }
+        
+    handleInputChange=(e)=>{
+        this.setState({[e.target.name]: e.target.value },() => { this.validateForm() })
     }
 
-    return (
-        <div className="container">
-            <form onSubmit={submitAddress} data-parsley-validate="">
-            <div className="form-group address">
-                    <input required value={fullname} name='fullname' onChange={e => setFullName(e.target.value)} className="form-control" placeholder="Enter Your Fullname"/>
-                </div>
-                <div className="form-group address">
-                    <input required value={address} name='address' onChange={e => setAddress(e.target.value)} className="form-control" placeholder="Enter Address"/>
-                </div>
-                <div className="form-group city">
-                    <input required value={city} name='city' onChange={e => setCity(e.target.value)} className="form-control" placeholder="Enter City"/>
-                </div>
-                <div className="form-group pincode">
-                    <input required value={pincode} name='pincode' onChange={e => setPincode(e.target.value)} className="form-control" placeholder="Enter Pin Code"/>
-                </div>
-                <div className="form-group phone">
-                    <input required value={phone} name='phone' onChange={e => setPhone(e.target.value)} className="form-control" placeholder="Enter Phone"/>
-                </div>
-                <button className="btn btn-primary" style={{float: "right"}}>
-                   Place Order
-                </button>
-            </form>
-        </div>
-    )
+    handleInputSubmit=(e)=>{
+        e.preventDefault();
+        this.props.click(this.state) ; 
+        this.props.history.push('/checkout/confirm');
+    }
+        
+    validateForm=()=>{
+        return this.state.name !=="" && this.state.phone !==""  && this.state.city !==""  && this.state.address !==""  && this.state.total_price !==""  && this.state.phone !==""  ;
+    }
+    
+    render(){
+            return(
+                <>
+                    <div className="card" style={{minWidth: '1000px'}}>
+                        <div className="form-title text-center"> <strong> Your Details</strong> </div>
+                        <form className="address-details" onSubmit={this.handleInputSubmit} id="form" data-parsley-validate>
+                            <div className="form-group">
+                                <label htmlFor="address_name">Name</label>
+                                <input type="text" className="form-control" id="address_name" name="name" value={this.state.name} onChange={this.handleInputChange} aria-describedby="emailHelp" placeholder="Enter your name"/>
+                            
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="address_address">Address</label>
+                                <input type="text" className="form-control" id="address_address"  name="address"  onChange={this.handleInputChange} aria-describedby="addressHelp" value={this.state.address} placeholder="Enter your address"/>
+                                
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="address_phone">Phone</label>
+                                <input type="text" className="form-control" id="address_phone" name="phone"  onChange={this.handleInputChange} aria-describedby="phoneHelp" value={this.state.phone} placeholder="Enter your phone"/>
+                                
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="address_city">City</label>
+                                <input type="text" className="form-control" id="address_city"  name = "city"  onChange={this.handleInputChange} aria-describedby="cityHelp" value={this.state.city} placeholder="Enter your city"/>
+                                
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="address_pincode">Pincode</label>
+                                <input type="text" className="form-control" id="address_pincode" name="pincode" onChange={this.handleInputChange}  aria-describedby="pincodeHelp" value={this.state.pincode} placeholder="Enter your pincode"/>
+                                
+                            </div>
+                            <button type="btn" className="btn btn-primary" disabled={!this.validateForm()}>Place Order</button>
+                        </form>
+                    </div>
+                </>
+            )
+    }
 }
 
-export default connect() (withRouter(Address))
+export default withRouter(Address)

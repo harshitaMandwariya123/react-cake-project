@@ -3,7 +3,7 @@ import axios from "axios";
 
 const addCake = (action) => {
     return axios({
-        url: process.env.REACT_APP_BASE_URL + '/addcake',headers:{authtoken:localStorage.token},
+        url: process.env.REACT_APP_BASE_URL + '/addcake',
         method: "post",
         data: action.payload || {}
     })

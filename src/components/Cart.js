@@ -1,7 +1,6 @@
 import {Link, withRouter} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import Cake from "./Cake";
 import {connect} from "react-redux";
 import {toast} from 'react-toastify'
 import {
@@ -57,12 +56,12 @@ const Cart = (props) => {
     return (
 
         <div style={{marginTop:"50px"}} className="container">
-                            <h1>My Cake Cart</h1>
-
+            <h1>My Cake Cart</h1>
             { cakes.length == 0 || props.loginStatus == false  ?
             <div className="row"> 
                 <div style={{marginTop:"50px",marginLeft:"300px"}}>
                     <img src = {cartEmpty} />
+                    <Link className="nav-link" to="/">Add Cakes to Cart</Link>
                 </div>
             </div> : 
             <div className="row">
@@ -83,52 +82,49 @@ const Cart = (props) => {
                             <th style={{border: "none"}} scope="col">Action</th>
                             </tr>
                         </thead>
-                    <tbody>
-            {
-                cakes.map((each , index) => {
-                    totalPrice += each.price
-                return(
-                <tr>
-                <th style={{border: "none"}} scope="row"><img style={{width:"100px",height:"100px"}} src={each.image} /></th>
-                <td style={{border: "none"}}>{each.name}</td>
-                <td style={{border: "none"}}><b>{each.price} INR</b></td>
-                <td style={{border: "none"}}><b>{each.quantity}</b></td>
-                 <td style={{border: "none"}}> <button className="btn btn-success" onClick={() => addOneCakeToCart(each)}>
-                        <span>
-                            +
-                        </span>
-                    </button>
-                <button className="btn btn-warning" onClick={() => removeOneCakeFromCart(each.cakeid)}>
-                    <span>
-                        -
-                    </span>
-                </button>
-                </td>
-                <td style={{border: "none"}}><button onClick={() => removeCakeFromCart(each.cakeid)} type="button" className="btn btn-danger">Remove</button></td>
-                </tr> 
-                )
-                
-                })
-                
-                }
-                
-            
-            </tbody>
-            </table>
-            </div>
-            <div className="col-md-2">
-            </div>
+                        <tbody>
+                            {
+                                cakes.map((each , index) => {
+                                    totalPrice += each.price;
+                                    return(
+                                        <tr>
+                                            <th style={{border: "none"}} scope="row"><img style={{width:"100px",height:"100px"}} src={each.image} /></th>
+                                            <td style={{border: "none"}}>{each.name}</td>
+                                            <td style={{border: "none"}}><b>{each.price} INR</b></td>
+                                            <td style={{border: "none"}}><b>{each.quantity}</b></td>
+                                            <td style={{border: "none"}}> 
+                                                    <button className="btn btn-success" onClick={() => addOneCakeToCart(each)}>
+                                                    <span>
+                                                        +
+                                                    </span>
+                                                </button>
+                                                <button className="btn btn-warning" onClick={() => removeOneCakeFromCart(each.cakeid)}>
+                                                <span>
+                                                    -
+                                                </span>
+                                                </button>
+                                            </td>
+                                            <td style={{border: "none"}}><button onClick={() => removeCakeFromCart(each.cakeid)} type="button" className="btn btn-danger">Remove</button></td>
+                                        </tr> 
+                                    )
+                                })
+                                
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            <div className="col-md-2"></div>
             <div style={{marginTop:"100px",height:"20%" }}className="col-md-4 border">
-            <div style={{marginTop:"20px"}}><b>
-            <p style={{float:"left"}}>Total</p>
-            <p style={{float:"right"}}>{totalPrice} INR</p></b>
-            </div>
-            <Link to="/checkout"><button style={{marginLeft:"80px",marginTop:"40px",marginBottom:"20px"}} 
-            className="btn btn-success">Checkout</button></Link>
+                <div style={{marginTop:"20px"}}><b>
+                    <p style={{float:"left"}}>Total</p>
+                    <p style={{float:"right"}}>{totalPrice} INR</p></b>
+                </div>
+                <Link to="/checkout/details"><button style={{marginLeft:"80px",marginTop:"40px",marginBottom:"20px"}} 
+                className="btn btn-success">Checkout</button></Link>
             </div>
             </div>
             }
-            </div>
+        </div>
     )
 }
 

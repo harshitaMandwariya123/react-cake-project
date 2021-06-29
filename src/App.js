@@ -13,11 +13,13 @@ import {toast} from 'react-toastify'
 import axios from "axios";
 import Orders from './components/Orders';
 import admin from './components/admin';
+import AllCakes from './components/AllCakes';
+import AddCakeForm from './components/AddCakeForm';
+toast.configure()
 
 var Cart = React.lazy(() => import('./components/Cart'))
 
 Cart = <Suspense fallback={<div>Loading...</div>}><Cart/></Suspense>
-
 
 function App() {
 
@@ -56,6 +58,8 @@ function App() {
             <Route exact path="/search" component={Search} />
             <Route exact path="/orders" component={Orders} />
             <Route exact path="/admin" component={admin} />
+            <Route exact path="/admin/addcakes"><AddCakeForm show={true}></AddCakeForm></Route>
+            <Route exact path="/admin/allcakes"><AllCakes></AllCakes> </Route>
             <Route exact path="/*" component={PageNotFound} />
             <Redirect to="/"></Redirect>
         </Switch>

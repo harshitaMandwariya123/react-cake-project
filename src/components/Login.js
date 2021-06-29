@@ -4,8 +4,6 @@ import {toast} from 'react-toastify'
 import {connect} from "react-redux";
 import {loginmiddleware} from "../reduxstore/middlewares";
 
-toast.configure()
-
 let Login = (props) => {
 
     const initialValues = {
@@ -23,11 +21,11 @@ let Login = (props) => {
     let onSubmitHandler = (event) => {
 		event.preventDefault();
         var middlefunction = loginmiddleware(inputs)
-			props.dispatch(middlefunction)
+		props.dispatch(middlefunction)
 	}
 
     return (
-        <form className="container mt-3" onSubmit={onSubmitHandler}  data-parsley-validate="">
+        <form className="container mt-3" onSubmit={onSubmitHandler}  data-parsley-validate>
             <h3>Login</h3>
 
             <div className="form-group">
@@ -43,22 +41,19 @@ let Login = (props) => {
             <div className="form-group">
                 <div className="custom-control custom-checkbox">
                     <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                    <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
+                    <label className="custom-control-label" htmlhtmlFor="customCheck1">Remember me</label>
                 </div>
             </div>
 
             <button type="submit" className="btn btn-primary btn-block">Submit</button>
-            <p className="text-right">
-                <a href="/forget-password">Forget password?</a>
-            </p>
             <p className="text-left">
                 <Link to="/signup">Don't have account? Signup</Link>
             </p>
-        </form>
+        </form> 
     );
 }
 
-Login =connect(function(state,props){
+Login = connect(function(state,props){
   if(state.AuthReducer?.isloggedin === true){
       props.history.push("/")
   }else{
@@ -67,6 +62,5 @@ Login =connect(function(state,props){
 	  }
   }
 })(Login) 
-// i passed login to withRouter it return me Login with some addional things
-// then i exported modified Login
+
 export default withRouter(Login)

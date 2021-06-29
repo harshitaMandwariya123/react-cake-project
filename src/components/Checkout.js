@@ -1,77 +1,71 @@
-import {Link, Route} from "react-router-dom";
-import Summary from "./Summary";
+
+import {Link, Redirect, Route, useRouteMatch, withRouter} from "react-router-dom";
+import Confirm from "./Confirm";
 import Address from "./Address";
-import {useState} from "react";
-import {connect} from "react-redux";
-import {placeOrderMiddleware} from "../reduxstore/middlewares";
-import {withRouter} from "react-router-dom";
+import {  useState } from 'react';
+import Summary from "./Summary";
+import { placeOrderMiddleware } from "../reduxstore/middlewares";
+import { connect } from "react-redux";
 
-let Checkout = (props) => {
+function Checkout(props){
+    var totalPrice = 0;
+    var {path} =  useRouteMatch()
+    var[data,setdata] = useState()
+    const[tab1,settab1] = useState(true);
+    const[tab2,settab2] = useState(false);
+    const[tab3,settab3] = useState(false);
 
-    const [disableAddressLink, setDisableAddressLink] = useState(true)
-    const [disablePaymentLink, setDisablePaymentLink] = useState(true)
-    const data = {}
-    let totalPrice = 0;
-
-    const handleAddressLink = () => {
-        setDisableAddressLink(false)
+    var SummaryTabChange =()=>{
+        settab2(true)
     }
-
-    const handlePaymentLink = () => {
-        setDisablePaymentLink(false)
+    var OrderTabChange =(data)=>{
+        setdata(data)
+        settab3(true)
     }
-
-    const handleAddressSubmit = (value) => {
-        value = value.split("_")
-        data.address = value[0]
-        data.city = value[1]
-        data.pincode = value[2]
-        data.phone = value[3]
-        props.cakes.map((each, index) => {
-            totalPrice += each.price
+    
+    var confirmTabChange=()=>{
+        props.cart.map((val,key)=> {
+            totalPrice += val.price
             return totalPrice
         })
-        data.name = (JSON.parse(localStorage.getItem('userData'))).name
-        data.price = totalPrice
-        data.cakes = props.cakes
-        props.dispatch(placeOrderMiddleware(data))
+         props.dispatch(placeOrderMiddleware(data,props.cart,totalPrice));
+         props.history.push("/orders") 
     }
 
-    return (
-        <div className="container" style={{marginTop: "100px"}}>
-            <h1>Checkout</h1>
-            <div className="row">
-                <ul className="nav nav-tabs" style={{width: '100%'}}>
-                    <li className="nav-item" style={{width: '50%'}}>
-                        <Link className={"nav-link " + (disableAddressLink ? "active" : "")} aria-current="page" to={'/checkout'}>Cart Summary</Link>
-                    </li>
-                    <li className="nav-item" style={{width: '50%'}}>
-                        {
-                            !disableAddressLink
-                            ? <Link className={"nav-link " + (disablePaymentLink ? "active" : "")} to={'/checkout/address'}>Address Details</Link>
-                                : <Link className="nav-link disabled" to={'/checkout/address'} tabIndex="-1" aria-disabled="true">Shipping Address</Link>
-                        }
+    return(
+        <div className="container-full card-groups mt-5">
+           <nav>
+            <ul className="card sidenav d-flex align-items-center">
+                    <li>
+                        <Link className={`${tab1===true?'nav-link active ':'nav-link disabled'}`} to={path+'/summary'}>
+                        <button type="button " className="btn btn-outline-primary checkout-button" ><strong>Order Summary</strong></button>
+                        </Link>
+                        <Link  className={`${tab2===true?'nav-link active':'nav-link disabled'}`}  to={path+'/details'}>
+                        <button type="button " className="btn btn-outline-primary checkout-button" ><strong>Place Order</strong></button>
+                        </Link>
+                        <Link  className={`${tab3===true?'nav-link active':'nav-link disabled'}`}  to={path+'/confirm'}>
+                        <button type="button " className="btn btn-outline-primary checkout-button" ><strong> Confirm Details</strong></button>
+                        </Link>
                     </li>
                 </ul>
-                <div className="card" style={{width: '100%',height: '100%'}}>
-                    <div className="">
-                        <Route exact path="/checkout"><Summary disableAddressLink={disableAddressLink} onChange={handleAddressLink} /></Route>
-                        <Route exact path="/checkout/address"><Address disablePaymentLink={disablePaymentLink} onChange={handlePaymentLink} onSubmit={handleAddressSubmit} /></Route>
-                    </div>
+           </nav>
+           
+            <div className="container col-md-8 checkout   m-5 mb-5">
+                <div className="row   ">
+                    <Route exact path={path}><Redirect to={path+"/summary"}></Redirect></Route>
+                    <Route exact path={path+"/details"} ><Address click={OrderTabChange}></Address></Route>
+                    <Route exact path={path+"/summary"}><Summary  click={SummaryTabChange}></Summary></Route>
+                    <Route exact path={path+"/confirm"} ><Confirm click={confirmTabChange} data={data} ></Confirm></Route>
                 </div>
             </div>
-        </div>
+      </div>
     )
 }
 
-Checkout = connect(function (state, props) {
-    if(state.CartReducer.success) {
-        props.history.push('/orders')
-        state.CartReducer.success = false
+function mapStateToProps(state,props){
+    return{
+      cart:state.CartReducer?.cart,
     }
-    return {
-        cakes: state.CartReducer.cart
-    }
-}) (Checkout)
-
-export default withRouter(Checkout)
+  };
+  
+export default connect(mapStateToProps)(withRouter(Checkout));

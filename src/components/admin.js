@@ -3,6 +3,7 @@ import axios from "axios";
 import Cake from "./Cake";
 import {withRouter} from "react-router-dom";
 import {useDispatch} from "react-redux";
+import {toast} from 'react-toastify'
 
 const Admin = (props) => {
     const dispatch = useDispatch()
@@ -28,7 +29,7 @@ const Admin = (props) => {
 
     useEffect(() => {
         axios({
-            url: process.env.REACT_APP_BASE_URL +'/allcakes',headers:{authtoken:localStorage.token},
+            url: process.env.REACT_APP_BASE_URL +'/allcakes',
             method: 'get'
         }).then(res => {
             const cakeList = res.data.data
@@ -36,6 +37,7 @@ const Admin = (props) => {
             setLoading(false)
         }, err => {
             setLoading(false)
+            toast.error(err); 
         })
     }, [])
 
@@ -44,12 +46,14 @@ const Admin = (props) => {
         let formData = new FormData()
         formData.append('file', event.target.files[0])
         axios({
-            url: process.env.REACT_APP_BASE_URL + '/upload',headers:{authtoken:localStorage.token},
+            url: process.env.REACT_APP_BASE_URL + '/upload',
             method: 'post',
             data: formData
         }).then(res => {
             setUploadCakeImage(res.data.imageUrl)
-        }, err => {})
+        }, err => {
+            toast.error(err); 
+        })
     }
 
     const handleAdd = () => {
@@ -85,7 +89,7 @@ const Admin = (props) => {
 
     return (
         <div className="container" style={{marginTop: "50px",marginBottom: "100px"}}>
-                    <h1>Admin</h1>
+            <h1>Admin</h1>
             <div className="accordion" id="accordionExample">
                 <div className="card">
                     <div className="card-header" id="headingOne">
@@ -96,7 +100,6 @@ const Admin = (props) => {
                             </button>
                         </h2>
                     </div>
-                        
                     <div id="collapseOne" className="collapse show" aria-labelledby="headingOne"
                          data-parent="#accordionExample">
                         <div className="row col-md-12">
@@ -126,25 +129,25 @@ const Admin = (props) => {
                     <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo"
                          data-parent="#accordionExample">
                         <div className="card-body">
-                            <form onSubmit={submitCake}>
+                            <form onSubmit={submitCake} data-parsley-validate="">
                                 <div className="form-group cake_image">
                                     <input type="file" name='cake_image' onChange={fileUpload} className="form-control" placeholder="Cake Image"/>
-                                    {cakeImage && <img src={cakeImage} alt="Cake" style={{width: '20%'}}/> }
+                                    {cakeImage && <img src={cakeImage} alt="Cake" style={{width: '20%'}} required/> }
                                 </div>
                                 <div className="form-group cake_name">
-                                    <input value={cakeName} name='cake_name' onChange={e => setCakeName(e.target.value)} className="form-control" placeholder="Cake Name"/>
+                                    <input value={cakeName} name='cake_name' onChange={e => setCakeName(e.target.value)} className="form-control" placeholder="Cake Name" required/>
                                 </div>
                                 <div className="form-group cake_desc">
-                                    <input value={cakeDesc} name='cake_desc' onChange={e => setCakeDesc(e.target.value)} className="form-control" placeholder="Cake Description"/>
+                                    <input value={cakeDesc} name='cake_desc' onChange={e => setCakeDesc(e.target.value)} className="form-control" placeholder="Cake Description" required/>
                                 </div>
                                 <div className="form-group cake_price">
-                                    <input value={cakePrice} name='cake_price' onChange={e => setCakePrice(e.target.value)} className="form-control" placeholder="Cake Price"/>
+                                    <input value={cakePrice} name='cake_price' onChange={e => setCakePrice(e.target.value)} className="form-control" placeholder="Cake Price" required/>
                                 </div>
                                 <div className="form-group cake_weight">
-                                    <input value={cakeWeight} name='cake_weight' onChange={e => setCakeWeight(e.target.value)} className="form-control" placeholder="Cake Weight"/>
+                                    <input value={cakeWeight} name='cake_weight' onChange={e => setCakeWeight(e.target.value)} className="form-control" placeholder="Cake Weight" required/>
                                 </div>
                                 <div className="form-group cake_type">
-                                    <select name="cake_type" value={cakeType} onChange={e => setCakeType(e.target.value)} className="form-control">
+                                    <select name="cake_type" value={cakeType} onChange={e => setCakeType(e.target.value)} className="form-control" required>
                                         <option value="" disabled>Select Type</option>
                                         <option value="birthday">Birthday</option>
                                         <option value="anniversary">Anniversary</option>
@@ -152,22 +155,21 @@ const Admin = (props) => {
                                     </select>
                                 </div>
                                 <div className="form-group cake_eggless">
-                                    <input type="checkbox" id="cake_eggless" value={cakeEggless} name='cake_eggless' onChange={e => setCakeEggless(e.target.checked)} className="form-control"/>
-                                    <label htmlFor="cake_eggless">Eggless</label>
+                                    <input type="checkbox" id="cake_eggless" value={cakeEggless} name='cake_eggless' onChange={e => setCakeEggless(e.target.checked)} className="form-control" required/>
+                                    <label htmlhtmlFor="cake_eggless">Eggless</label>
                                 </div>
-                                <div className="form-group cake_flavour">
+                                <div className="form-group cake_flavour required">
                                     <input value={cakeFlavour} name='cake_flavour' onChange={e => setCakeFlavour(e.target.value)} className="form-control" placeholder="Cake Flavour"/>
                                 </div>
                                 <div className="form-group cake_flavour">
                                     <div className="row">
-                                        
                                         <div className="col-md-12 form-group">
                                             {
                                                 fields.map((each, index) => {
                                                     return (
                                                         <div className="row col-md-12" key={`${each}-${index}`}>
                                                             <div className="col-md-9">
-                                                                <input name='cake_ingredients' onChange={e => handleChange(index, e)} className="form-control" placeholder="Cake Ingredients"/>
+                                                                <input name='cake_ingredients' onChange={e => handleChange(index, e)} className="form-control" placeholder="Cake Ingredients" required/>
                                                             </div>
                                                             <div className="col-md-3">
                                                                 <button type="button" className="btn btn-success" onClick={handleAdd}>
